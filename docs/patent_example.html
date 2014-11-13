@@ -100,10 +100,10 @@ patent_example.py -v</code></p>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
             <span class="n">row</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
             <span class="n">row</span><span class="p">[</span><span class="s">&#39;LatLong&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">&#39;Lat&#39;</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">&#39;Lng&#39;</span><span class="p">]))</span>
-            <span class="n">row</span><span class="p">[</span><span class="s">&#39;Class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">&#39;Class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">set_delim</span><span class="p">))</span>
-            <span class="n">row</span><span class="p">[</span><span class="s">&#39;Coauthor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">author</span> <span class="k">for</span> <span class="n">author</span>
-                                     <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;Coauthor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">set_delim</span><span class="p">)</span>
-                                     <span class="k">if</span> <span class="n">author</span> <span class="o">!=</span> <span class="s">&#39;none&#39;</span><span class="p">])</span>
+            <span class="n">row</span><span class="p">[</span><span class="s">&#39;Class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">&#39;Class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">set_delim</span><span class="p">)))</span>
+            <span class="n">row</span><span class="p">[</span><span class="s">&#39;Coauthor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">author</span> <span class="k">for</span> <span class="n">author</span>
+                                            <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;Coauthor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">set_delim</span><span class="p">)</span>
+                                            <span class="k">if</span> <span class="n">author</span> <span class="o">!=</span> <span class="s">&#39;none&#39;</span><span class="p">]))</span>
             
             <span class="n">data_d</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span>
 
@@ -311,7 +311,7 @@ press 'f' when you are finished</p>
       <div class="highlight"><pre>    <span class="k">print</span> <span class="s">&#39;starting active labeling...&#39;</span>
     <span class="n">dedupe</span><span class="o">.</span><span class="n">consoleLabel</span><span class="p">(</span><span class="n">deduper</span><span class="p">)</span>
 
-    <span class="n">deduper</span><span class="o">.</span><span class="n">train</span><span class="p">()</span></pre></div>
+    <span class="n">deduper</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">uncovered_dupes</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -370,8 +370,8 @@ this file.</p>
     <div class='code'>
       <div class="highlight"><pre><span class="n">cluster_membership</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">cluster_id</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">cluster_id</span><span class="p">,</span> <span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clustered_dupes</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">record_id</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">cluster_id</span><span class="p">,</span> <span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clustered_dupes</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">score</span><span class="p">):</span>
         <span class="n">cluster_membership</span><span class="p">[</span><span class="n">record_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">cluster_id</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
 
 <span class="n">unique_id</span> <span class="o">=</span> <span class="n">cluster_id</span> <span class="o">+</span> <span class="mi">1</span>

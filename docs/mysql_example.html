@@ -221,7 +221,7 @@ account</p>
               <span class="p">{</span><span class="s">&#39;field&#39;</span> <span class="p">:</span> <span class="s">&#39;state&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;String&#39;</span><span class="p">},</span>
               <span class="p">{</span><span class="s">&#39;field&#39;</span> <span class="p">:</span> <span class="s">&#39;zip&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;String&#39;</span><span class="p">,</span> <span class="s">&#39;has missing&#39;</span> <span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
               <span class="p">{</span><span class="s">&#39;field&#39;</span> <span class="p">:</span> <span class="s">&#39;person&#39;</span><span class="p">,</span> <span class="s">&#39;variable name&#39;</span> <span class="p">:</span> <span class="s">&#39;person&#39;</span><span class="p">,</span>
-               <span class="s">&#39;type&#39;</span> <span class="p">:</span> <span class="s">&#39;Categorical&#39;</span><span class="p">,</span> <span class="s">&#39;categories&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]},</span>
+               <span class="s">&#39;type&#39;</span> <span class="p">:</span> <span class="s">&#39;Exists&#39;</span><span class="p">},</span>
               <span class="p">{</span><span class="s">&#39;type&#39;</span> <span class="p">:</span> <span class="s">&#39;Interaction&#39;</span><span class="p">,</span>
                <span class="s">&#39;interaction variables&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s">&#39;person&#39;</span><span class="p">,</span> <span class="s">&#39;address&#39;</span><span class="p">]},</span>
               <span class="p">{</span><span class="s">&#39;type&#39;</span> <span class="p">:</span> <span class="s">&#39;Interaction&#39;</span><span class="p">,</span> 
@@ -335,7 +335,7 @@ mean that we have to use blocks that put together many, many
 distinct pairs that we'll have to expensively, compare as well.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="n">deduper</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">ppc</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">uncovered_dupes</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>    <span class="n">deduper</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">ppc</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">uncovered_dupes</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -690,7 +690,7 @@ table</p>
 
 <span class="k">for</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">clustered_dupes</span> <span class="p">:</span>
     <span class="n">cluster_id</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">donor_id</span> <span class="ow">in</span> <span class="n">cluster</span> <span class="p">:</span>
+    <span class="k">for</span> <span class="n">donor_id</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span> <span class="p">:</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;INSERT INTO entity_map VALUES (</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">,</span>
                   <span class="p">(</span><span class="n">donor_id</span><span class="p">,</span> <span class="n">cluster_id</span><span class="p">,</span> <span class="n">score</span><span class="p">))</span>
 
