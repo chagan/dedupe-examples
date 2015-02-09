@@ -44,8 +44,6 @@ logging.getLogger().setLevel(log_level)
 
 # ## Setup
 
-# Switch to our working directory and set up our input and out put paths,
-# as well as our settings and training file locations
 input_file = 'csv_example_messy_input.csv'
 output_file = 'csv_example_output.csv'
 settings_file = 'csv_example_learned_settings'
@@ -109,7 +107,7 @@ else:
     deduper = dedupe.Dedupe(fields)
 
     # To train dedupe, we feed it a sample of records.
-    deduper.sample(data_d, 150000)
+    deduper.sample(data_d, 15000)
 
 
     # If we have training data saved from a previous run of dedupe,

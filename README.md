@@ -2,6 +2,20 @@
 
 Example scripts for the [dedupe](https://github.com/datamade/dedupe), a library that uses machine learning to perform de-duplication and entity resolution quickly on structured data.
 
+To get these examples:
+```bash
+git clone https://github.com/datamade/dedupe-examples.git
+cd dedupe-examples
+```
+
+or [download this repository](https://github.com/datamade/dedupe/archive/master.zip)
+
+```bash
+cd /path/to/downloaded/file
+unzip master.zip
+cd dedupe-examples
+```
+
 ### [CSV example](http://datamade.github.com/dedupe-examples/docs/csv_example.html) - early childhood locations
 
 This example works with a list of early childhood education sites in Chicago from 10 different sources.
@@ -13,6 +27,17 @@ python csv_example.py
   (use 'y', 'n' and 'u' keys to flag duplicates for active learning, 'f' when you are finished)
   
 **To see how you might use dedupe with smallish data, see the [annotated source code for csv_example.py](http://datamade.github.com/dedupe/doc/csv_example.html).**
+
+### [Patent example](http://datamade.github.io/dedupe-examples/docs/patent_example.html) -  patent holders
+
+This example works with Dutch inventors from the PATSTAT international patent data file
+
+```bash
+cd patent_example
+pip install unidecode
+python patent_example.py
+```
+  (use 'y', 'n' and 'u' keys to flag duplicates for active learning, 'f' when you are finished)
 
 ### [Record Linkage example](http://datamade.github.com/dedupe-examples/docs/record_linkage_example.html) -  electronics products
 This example links two spreadsheets of electronics products and links up the matching entries. Each dataset individually has no duplicates.
@@ -56,6 +81,7 @@ To follow this example you need to:
 * Create a PostgreSQL database
 * `easy_install psycopg2` or `pip install psycopg2`
 * `easy_install dj-database-url` or `pip install dj-database-url`
+* `easy_install unidecode` or `pip install unidecode`
 * Set an environment variable with your PostgreSQL connection details: `export DATABASE_URL=postgres://user:password@host/mydatabase`
 
 Once that's all done you can run the example:

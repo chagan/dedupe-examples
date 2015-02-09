@@ -63,14 +63,14 @@ start_time = time.time()
 # We use Server Side cursors (SSDictCursor and SSCursor) to [avoid
 # having to have enormous result sets in memory](http://stackoverflow.com/questions/1808150/how-to-efficiently-use-mysqldb-sscursor).
 con = MySQLdb.connect(db='contributions',
-                      #charset='utf8',
+                      charset='utf8',
                       read_default_file = MYSQL_CNF, 
                       cursorclass=MySQLdb.cursors.SSDictCursor)
 c = con.cursor()
 c.execute("SET net_write_timeout = 3600")
 
 con2 = MySQLdb.connect(db='contributions',
-                       #charset='utf8',
+                       charset='utf8',
                        read_default_file = MYSQL_CNF, 
                        cursorclass=MySQLdb.cursors.SSCursor)
 c2 = con2.cursor()
@@ -193,9 +193,9 @@ print 'creating inverted index'
 
 
 for field in deduper.blocker.tfidf_fields :
-    c2.execute("SELECT donor_id, %s FROM processed_donors" % field)
-    field_data = (row for row in c2)
-    deduper.blocker.tfIdfBlock(field_data, field)
+    c2.execute("SELECT DISTINCT %s FROM processed_donors" % field)
+    field_data = (row[0] for row in c2)
+    deduper.blocker.index(field_data, field)
 
 # Now we are ready to write our blocking map table by creating a
 # generator that yields unique `(block_key, donor_id)` tuples.
@@ -243,15 +243,19 @@ while not done :
 
 pool.close()
 
+# Free up memory by removing indices we don't need anymore
+deduper.blocker.resetIndices()
+
 # Remove blocks that contain only one record, sort by block key and
 # donor, key and index blocking map.
-#
+
 # These steps, particularly the sorting will let us quickly create
 # blocks of data for comparison
 print 'prepare blocking table. this will probably take a while ...'
 
 logging.info("indexing block_key")
-c.execute("CREATE INDEX blocking_map_key_idx ON blocking_map (block_key)")
+c.execute("ALTER TABLE blocking_map "
+          "ADD UNIQUE INDEX (block_key, donor_id)")
 
 c.execute("DROP TABLE IF EXISTS plural_key")
 c.execute("DROP TABLE IF EXISTS plural_block")
@@ -265,9 +269,13 @@ logging.info("calculating plural_key")
 c.execute("CREATE TABLE plural_key "
           "(block_key VARCHAR(200), "
           " block_id INTEGER UNSIGNED AUTO_INCREMENT, "
-          " PRIMARY KEY (block_id)) " 
-          "(SELECT block_key FROM blocking_map "
-          " GROUP BY block_key HAVING COUNT(*) > 1)")
+          " PRIMARY KEY (block_id)) "
+          "(SELECT block_key FROM "
+          " (SELECT block_key, "
+          "  GROUP_CONCAT(donor_id ORDER BY donor_id) AS block "
+          "  FROM blocking_map "
+          "  GROUP BY block_key HAVING COUNT(*) > 1) AS blocks "
+          " GROUP BY block)")
 
 logging.info("creating block_key index")
 c.execute("CREATE UNIQUE INDEX block_key_idx ON plural_key (block_key)")
@@ -289,7 +297,9 @@ c.execute("ALTER TABLE plural_block "
 # do this. This function will truncate very long lists of associated
 # ids, so we'll also increase the maximum string length to try to
 # avoid this.
+
 c.execute("SET group_concat_max_len = 2048")
+
 
 logging.info("creating covered_blocks")
 c.execute("CREATE TABLE covered_blocks "
@@ -371,7 +381,7 @@ c.execute("CREATE TABLE entity_map "
           "(donor_id INTEGER, canon_id INTEGER, "
           " cluster_score FLOAT, PRIMARY KEY(donor_id))")
 
-for cluster, score in clustered_dupes :
+for cluster, scores in clustered_dupes :
     cluster_id = cluster[0]
     for donor_id, score in zip(cluster, scores) :
         c.execute('INSERT INTO entity_map VALUES (%s, %s, %s)',
