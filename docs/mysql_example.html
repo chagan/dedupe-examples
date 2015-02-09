@@ -134,7 +134,19 @@ information in <code>examples/mysql_example/mysql.cnf</code></p>
 having to have enormous result sets in memory</a>.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="n">con</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;contributions&#39;</span><span class="p">,</span></pre></div>
+      <div class="highlight"><pre><span class="n">con</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;contributions&#39;</span><span class="p">,</span>
+                      <span class="n">charset</span><span class="o">=</span><span class="s">&#39;utf8&#39;</span><span class="p">,</span>
+                      <span class="n">read_default_file</span> <span class="o">=</span> <span class="n">MYSQL_CNF</span><span class="p">,</span> 
+                      <span class="n">cursorclass</span><span class="o">=</span><span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">SSDictCursor</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET net_write_timeout = 3600&quot;</span><span class="p">)</span>
+
+<span class="n">con2</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;contributions&#39;</span><span class="p">,</span>
+                       <span class="n">charset</span><span class="o">=</span><span class="s">&#39;utf8&#39;</span><span class="p">,</span>
+                       <span class="n">read_default_file</span> <span class="o">=</span> <span class="n">MYSQL_CNF</span><span class="p">,</span> 
+                       <span class="n">cursorclass</span><span class="o">=</span><span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">SSCursor</span><span class="p">)</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="n">con2</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET net_write_timeout = 3600&quot;</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -142,38 +154,6 @@ having to have enormous result sets in memory</a>.</p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-7'>#</a>
-      </div>
-      <p>charset='utf8',</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>                      <span class="n">read_default_file</span> <span class="o">=</span> <span class="n">MYSQL_CNF</span><span class="p">,</span> 
-                      <span class="n">cursorclass</span><span class="o">=</span><span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">SSDictCursor</span><span class="p">)</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET net_write_timeout = 3600&quot;</span><span class="p">)</span>
-
-<span class="n">con2</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s">&#39;contributions&#39;</span><span class="p">,</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-8'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-8'>#</a>
-      </div>
-      <p>charset='utf8',</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>                       <span class="n">read_default_file</span> <span class="o">=</span> <span class="n">MYSQL_CNF</span><span class="p">,</span> 
-                       <span class="n">cursorclass</span><span class="o">=</span><span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">SSCursor</span><span class="p">)</span>
-<span class="n">c2</span> <span class="o">=</span> <span class="n">con2</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET net_write_timeout = 3600&quot;</span><span class="p">)</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-9'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-9'>#</a>
       </div>
       <p>We'll be using variations on this following select statement to pull
 in campaign donor info.</p>
@@ -186,10 +166,10 @@ in campaign donor info.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-10'>
+  <div class='section' id='section-8'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-10'>#</a>
+        <a class='octothorpe' href='#section-8'>#</a>
       </div>
       <h2>Training</h2>
     </div>
@@ -202,10 +182,10 @@ in campaign donor info.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-11'>
+  <div class='section' id='section-9'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-11'>#</a>
+        <a class='octothorpe' href='#section-9'>#</a>
       </div>
       <p>Define the fields dedupe will pay attention to</p>
 <p>The address, city, and zip fields are often missing, so we'll
@@ -230,10 +210,10 @@ account</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-12'>
+  <div class='section' id='section-10'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-12'>#</a>
+        <a class='octothorpe' href='#section-10'>#</a>
       </div>
       <p>Create a new deduper object and pass our data model to it.</p>
     </div>
@@ -242,10 +222,10 @@ account</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-13'>
+  <div class='section' id='section-11'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-13'>#</a>
+        <a class='octothorpe' href='#section-11'>#</a>
       </div>
       <p>We will sample pairs from the entire donor table for training</p>
     </div>
@@ -258,10 +238,10 @@ account</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-14'>
+  <div class='section' id='section-12'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-14'>#</a>
+        <a class='octothorpe' href='#section-12'>#</a>
       </div>
       <p>If we have training data saved from a previous run of dedupe,
 look for it an load it in.</p>
@@ -276,10 +256,10 @@ scratch, delete the training_file</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-15'>
+  <div class='section' id='section-13'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-15'>#</a>
+        <a class='octothorpe' href='#section-13'>#</a>
       </div>
       <h2>Active learning</h2>
     </div>
@@ -288,10 +268,10 @@ scratch, delete the training_file</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-16'>
+  <div class='section' id='section-14'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-16'>#</a>
+        <a class='octothorpe' href='#section-14'>#</a>
       </div>
       <p>Starts the training loop. Dedupe will find the next pair of records
 it is least certain about and ask you to label them as duplicates
@@ -302,10 +282,10 @@ or not.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-17'>
+  <div class='section' id='section-15'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-17'>#</a>
+        <a class='octothorpe' href='#section-15'>#</a>
       </div>
       <p>use 'y', 'n' and 'u' keys to flag duplicates
 press 'f' when you are finished</p>
@@ -315,10 +295,10 @@ press 'f' when you are finished</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-18'>
+  <div class='section' id='section-16'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-18'>#</a>
+        <a class='octothorpe' href='#section-16'>#</a>
       </div>
       <p>Notice our two arguments here</p>
 <p><code>ppc</code> limits the Proportion of Pairs Covered that we allow a
@@ -339,10 +319,10 @@ distinct pairs that we'll have to expensively, compare as well.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-19'>
+  <div class='section' id='section-17'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-19'>#</a>
+        <a class='octothorpe' href='#section-17'>#</a>
       </div>
       <p>When finished, save our labeled, training pairs to disk</p>
     </div>
@@ -354,10 +334,10 @@ distinct pairs that we'll have to expensively, compare as well.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-20'>
+  <div class='section' id='section-18'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-20'>#</a>
+        <a class='octothorpe' href='#section-18'>#</a>
       </div>
       <p>We can now remove some of the memory hobbing objects we used
 for training</p>
@@ -367,10 +347,10 @@ for training</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-21'>
+  <div class='section' id='section-19'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-21'>#</a>
+        <a class='octothorpe' href='#section-19'>#</a>
       </div>
       <h1>Blocking</h1>
     </div>
@@ -379,10 +359,10 @@ for training</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-22'>
+  <div class='section' id='section-20'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-22'>#</a>
+        <a class='octothorpe' href='#section-20'>#</a>
       </div>
       <p>To run blocking on such a large set of data, we create a separate table
 that contains blocking keys and record ids</p>
@@ -396,10 +376,10 @@ that contains blocking keys and record ids</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-23'>
+  <div class='section' id='section-21'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-23'>#</a>
+        <a class='octothorpe' href='#section-21'>#</a>
       </div>
       <p>If dedupe learned a TF-IDF blocking rule, we have to take a pass
 through the data and create TF-IDF canopies. This can take up to an
@@ -410,16 +390,16 @@ hour</p>
 
 
 <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">tfidf_fields</span> <span class="p">:</span>
-    <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT donor_id, </span><span class="si">%s</span><span class="s"> FROM processed_donors&quot;</span> <span class="o">%</span> <span class="n">field</span><span class="p">)</span>
-    <span class="n">field_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">c2</span><span class="p">)</span>
-    <span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">tfIdfBlock</span><span class="p">(</span><span class="n">field_data</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span></pre></div>
+    <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT DISTINCT </span><span class="si">%s</span><span class="s"> FROM processed_donors&quot;</span> <span class="o">%</span> <span class="n">field</span><span class="p">)</span>
+    <span class="n">field_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">c2</span><span class="p">)</span>
+    <span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">field_data</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-24'>
+  <div class='section' id='section-22'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-24'>#</a>
+        <a class='octothorpe' href='#section-22'>#</a>
       </div>
       <p>Now we are ready to write our blocking map table by creating a
 generator that yields unique <code>(block_key, donor_id)</code> tuples.</p>
@@ -433,10 +413,10 @@ generator that yields unique <code>(block_key, donor_id)</code> tuples.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-25'>
+  <div class='section' id='section-23'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-25'>#</a>
+        <a class='octothorpe' href='#section-23'>#</a>
       </div>
       <p>MySQL has a hard limit on the size of a data object that can be
 passed to it.  To get around this, we chunk the blocked data in
@@ -447,10 +427,10 @@ to groups of 30,000 blocks</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-26'>
+  <div class='section' id='section-24'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-26'>#</a>
+        <a class='octothorpe' href='#section-24'>#</a>
       </div>
       <p>We will also speed up the writing by of blocking map by using 
 parallel database writers</p>
@@ -489,21 +469,45 @@ parallel database writers</p>
     </div>
   </div>
   <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      <p>Free up memory by removing indices we don't need anymore</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">resetIndices</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      <p>Remove blocks that contain only one record, sort by block key and
+donor, key and index blocking map.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
   <div class='section' id='section-27'>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-27'>#</a>
       </div>
-      <p>Remove blocks that contain only one record, sort by block key and
-donor, key and index blocking map.</p>
-<p>These steps, particularly the sorting will let us quickly create
+      <p>These steps, particularly the sorting will let us quickly create
 blocks of data for comparison</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;prepare blocking table. this will probably take a while ...&#39;</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;indexing block_key&quot;</span><span class="p">)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;CREATE INDEX blocking_map_key_idx ON blocking_map (block_key)&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;ALTER TABLE blocking_map &quot;</span>
+          <span class="s">&quot;ADD UNIQUE INDEX (block_key, donor_id)&quot;</span><span class="p">)</span>
 
 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;DROP TABLE IF EXISTS plural_key&quot;</span><span class="p">)</span>
 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;DROP TABLE IF EXISTS plural_block&quot;</span><span class="p">)</span>
@@ -526,9 +530,13 @@ singleton block we can ignore them. </p>
 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;CREATE TABLE plural_key &quot;</span>
           <span class="s">&quot;(block_key VARCHAR(200), &quot;</span>
           <span class="s">&quot; block_id INTEGER UNSIGNED AUTO_INCREMENT, &quot;</span>
-          <span class="s">&quot; PRIMARY KEY (block_id)) &quot;</span> 
-          <span class="s">&quot;(SELECT block_key FROM blocking_map &quot;</span>
-          <span class="s">&quot; GROUP BY block_key HAVING COUNT(*) &gt; 1)&quot;</span><span class="p">)</span>
+          <span class="s">&quot; PRIMARY KEY (block_id)) &quot;</span>
+          <span class="s">&quot;(SELECT block_key FROM &quot;</span>
+          <span class="s">&quot; (SELECT block_key, &quot;</span>
+          <span class="s">&quot;  GROUP_CONCAT(donor_id ORDER BY donor_id) AS block &quot;</span>
+          <span class="s">&quot;  FROM blocking_map &quot;</span>
+          <span class="s">&quot;  GROUP BY block_key HAVING COUNT(*) &gt; 1) AS blocks &quot;</span>
+          <span class="s">&quot; GROUP BY block)&quot;</span><span class="p">)</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;creating block_key index&quot;</span><span class="p">)</span>
 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;CREATE UNIQUE INDEX block_key_idx ON plural_key (block_key)&quot;</span><span class="p">)</span>
@@ -560,6 +568,7 @@ avoid this.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET group_concat_max_len = 2048&quot;</span><span class="p">)</span>
+
 
 <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;creating covered_blocks&quot;</span><span class="p">)</span>
 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;CREATE TABLE covered_blocks &quot;</span>
@@ -688,7 +697,7 @@ table</p>
           <span class="s">&quot;(donor_id INTEGER, canon_id INTEGER, &quot;</span>
           <span class="s">&quot; cluster_score FLOAT, PRIMARY KEY(donor_id))&quot;</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">clustered_dupes</span> <span class="p">:</span>
+<span class="k">for</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">scores</span> <span class="ow">in</span> <span class="n">clustered_dupes</span> <span class="p">:</span>
     <span class="n">cluster_id</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">donor_id</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span> <span class="p">:</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;INSERT INTO entity_map VALUES (</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">,</span>
