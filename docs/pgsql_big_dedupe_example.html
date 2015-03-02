@@ -375,18 +375,17 @@ that contains blocking keys and record ids</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-20'>#</a>
       </div>
-      <p>If dedupe learned a TF-IDF blocking rule, we have to take a pass
-through the data and create TF-IDF canopies. This can take up to an
-hour</p>
+      <p>If dedupe learned a Index Predicate, we have to take a pass
+through the data and create indices.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;creating inverted index&#39;</span>
 
-<span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">tfidf_fields</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">index_fields</span><span class="p">:</span>
     <span class="n">c2</span> <span class="o">=</span> <span class="n">con2</span><span class="o">.</span><span class="n">cursor</span><span class="p">(</span><span class="s">&#39;c2&#39;</span><span class="p">)</span>
-    <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT donor_id, </span><span class="si">%s</span><span class="s"> FROM processed_donors&quot;</span> <span class="o">%</span> <span class="n">field</span><span class="p">)</span>
+    <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT DISTINCT </span><span class="si">%s</span><span class="s"> FROM processed_donors&quot;</span> <span class="o">%</span> <span class="n">field</span><span class="p">)</span>
     <span class="n">field_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">c2</span><span class="p">)</span>
-    <span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">tfIdfBlock</span><span class="p">(</span><span class="n">field_data</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+    <span class="n">deduper</span><span class="o">.</span><span class="n">blocker</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">field_data</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
     <span class="n">c2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></pre></div>
     </div>
   </div>
