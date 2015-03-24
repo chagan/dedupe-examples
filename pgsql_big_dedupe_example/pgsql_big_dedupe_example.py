@@ -117,13 +117,13 @@ else:
               ]
 
     # Create a new deduper object and pass our data model to it.
-    deduper = dedupe.Dedupe(fields, data_sample, num_cores=4)
+    deduper = dedupe.Dedupe(fields, num_cores=4)
 
     # Named cursor runs server side with psycopg2
     cur = con.cursor('donor_select')
 
     cur.execute(DONOR_SELECT)
-    temp_d = dict((i, row) for i, row in enumerate(c))
+    temp_d = dict((i, row) for i, row in enumerate(cur))
 
     deduper.sample(temp_d, 75000)
     del temp_d
@@ -196,7 +196,7 @@ print 'creating inverted index'
 for field in deduper.blocker.index_fields:
     c2 = con2.cursor('c2')
     c2.execute("SELECT DISTINCT %s FROM processed_donors" % field)
-    field_data = (row for row in c2)
+    field_data = (row[0] for row in c2)
     deduper.blocker.index(field_data, field)
     c2.close()
 
