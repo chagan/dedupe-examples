@@ -176,7 +176,6 @@ else:
     # We can now remove some of the memory hobbing objects we used
     # for training
     deduper.cleanupTraining()
-    del data_sample
 
 ## Blocking
 print 'blocking...'
@@ -211,6 +210,7 @@ b_data = deduper.blocker(full_data)
 
 # Write out blocking map to CSV so we can quickly load in with
 # Postgres COPY
+print 'writing blocking map to csv'
 csv_file = tempfile.NamedTemporaryFile(prefix='blocks_', delete=False)
 csv_writer = csv.writer(csv_file)
 csv_writer.writerows(b_data)
